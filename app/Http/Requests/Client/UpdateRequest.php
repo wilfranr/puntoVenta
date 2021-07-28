@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Requests\Client;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return false;
+    }
+
+    public function rules()
+    {
+        return [
+            'name'=> 'required|string|max:255',
+            'email'=> 'nullable|email|string|max:200|email:rfc,dns',
+            'client_id'=> 'required|string|unique:providers, client_id,'. $this->route('client')->id.'max:12',
+            'address'=> 'nullable|string|max:255', 
+            'phone'=> 'nullable|string|unique:providers'. $this->route('client')->id.'max:14',
+        ];
+    }
+
+    public function messages(){
+        return[
+            'name.required'=>'Este campo es requerido',
+            'name.string'=>'El valor no es correcto',
+            'name.max'=>'Sólo se permite 255 caracteres',
+            
+            'email.email'=>'No es una dirección váilda',
+            'email.string'=>'El valor no es correcto',
+            'email.max'=>'Sólo se permite 255 caracteres',
+            'email.unique'=>'Este Email ya se encuentra registrado',
+            'email.email'=>'No es un email válido',
+            
+            'client_id.required'=>'Este campo es requerido',
+            'client_id.string'=>'El valor no es correcto',
+            'client_id.max'=>'Sólo se permite 12 caracteres',
+            'client_id.unique'=>'Este id ya se encuentra registrado',
+            
+            'address.string'=>'El valor no es correcto',
+            'address.max'=>'Sólo se permite 255 caracteres',
+            
+            'phone.string'=>'El valor no es correcto',
+            'phone.max'=>'Sólo se permite 14 caracteres',
+            'phone.unique'=>'Este teléfono ya se encuentra registrado',
+        ];
+    }
+}
